@@ -11,7 +11,8 @@ public class Background extends GameObject{
         super();
         BufferedImage image = SpriteUtils.loadImage("assets\\images\\background\\0.png");
         this.renderer = new SingleImage(image);
-        this.position.set(0, 600 - image.getHeight());
+        this.position.set(0, Setting.SCREEN_HEIGTH - image.getHeight());
+        this.anchor.set(0,0);
     }
 
     @Override

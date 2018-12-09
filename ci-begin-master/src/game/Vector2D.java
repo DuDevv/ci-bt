@@ -19,9 +19,16 @@ public class Vector2D {
         this.y = y;
         return this;
     }
+    public Vector2D set(Vector2D other){
+        return this.set(other.x,other.y);
+    }
 
     public Vector2D add(float x, float y) {
+
         return new Vector2D(this.x + x, this.y + y);
+    }
+    public Vector2D add(Vector2D other){
+        return  new Vector2D(other.x,other.y);
     }
 
     public Vector2D addThis(float x, float y) {
@@ -29,9 +36,17 @@ public class Vector2D {
         this.y += y;
         return this;
     }
+    public  Vector2D addThis(Vector2D other){
+        return new Vector2D(other.x,other.y);
+    }
 
     public Vector2D substract(float x, float y) {
+
         return new Vector2D(this.x - x, this.y - y);
+    }
+
+    public Vector2D substract(Vector2D other){
+        return new Vector2D(other.x,other.y);
     }
 
     public Vector2D substractThis(float x, float y) {
@@ -39,8 +54,12 @@ public class Vector2D {
         this.y -= y;
         return this;
     }
+    public Vector2D substractThis(Vector2D other){
+        return new Vector2D(other.x,other.y);
+    }
 
     public Vector2D scale(float rate) {
+
         return new Vector2D(this.x * rate, this.y * rate);
     }
 
@@ -49,7 +68,28 @@ public class Vector2D {
         this.y *= rate;
         return this;
     }
+    public float getlength(){
+        return (float)Math.sqrt(this.x * this.y + this.y*this.y);
 
+    }
+    public Vector2D floatsetlength(float length) {
+        if (this.getlength()==0){
+            return this;
+        }
+        float rate = length / this.getlength();
+        this.x =this.x*rate;
+        this.y=this.y*rate;
+        return this;
+    }
+    public float getAngle(){
+        return (float)Math.atan(this.y/this.x);
+    }
+    public Vector2D  setAngle(float angle){
+        float length = this.getlength();
+        this.x = length +(float)Math.cos(angle);
+        this.y = length +(float)Math.sin(angle);
+        return this;
+    }
     @Override
     public String toString() {
         return "game.Vector2D{" +

@@ -1,21 +1,24 @@
 package game;
 
+import game.player.Player;
+import game.player.PlayerBullet;
+import game.renderer.TextRenderer;
+
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
 public class GameCanvas extends JPanel{
-    Background background;
-    Player player;
-    static ArrayList<PlayerBullet> playerBullets;
-    
-    public GameCanvas() {
-        this.background = new Background();
-        this.player = new Player();
-        this.playerBullets = new ArrayList<>();
-//        PlayerBullet bullet = new PlayerBullet();
-////        bullet.position.set(300,500);
-////        playerBullets.add(bullet);
+
+
+    public  GameCanvas() {
+        //this.background = new Background();
+        GameObject.addGameObject(new Background());
+        //this.player = new Player();
+        GameObject.addGameObject(new Player());
+        //this.playerBullets = new ArrayList<>();
+        GameObject.addGameObject(new Enemies());
+
 
     }
 
@@ -23,22 +26,12 @@ public class GameCanvas extends JPanel{
     public void paint(Graphics g) {
         g.setColor(Color.GREEN);
         g.fillRect(0, 0, 800, 600);
-        this.background.render(g);
-        this.player.render(g);
-        for (int i =0;i<playerBullets.size();i++){
-            PlayerBullet bullet = this.playerBullets.get(i);
-            bullet.render(g);
-        }
+       GameObject.renderAll(g);
+
     }
 
     public void runAll() {
-        //
-        this.background.run();
-        this.player.run();
-        for (int i =0;i<playerBullets.size();i++){
-            PlayerBullet bullet = this.playerBullets.get(i);
-            bullet.run();
-        }
+        GameObject.runAll();
     }
 
     public void renderAll() {
