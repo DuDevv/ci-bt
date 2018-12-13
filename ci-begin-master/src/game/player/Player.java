@@ -1,10 +1,7 @@
 package game.player;
 
-import game.GameCanvas;
-import game.GameObject;
-import game.GameWindow;
-import game.Setting;
-import game.renderer.Animation;
+import game.*;
+import game.renderer.AnimationRenderer;
 import tklibs.Mathx;
 import tklibs.SpriteUtils;
 
@@ -12,14 +9,16 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player extends GameObject {
+    FrameCounter fireCounter;
+
     public Player(){
         super();
-        //this.image = SpriteUtils.loadImage("assets/images/players/straight/0.png");
         this.position.set(200, 300);
-        this.creatRenderer();
+        this.createRenderer();
+        this.fireCounter = new FrameCounter(20);
     }
 
-    private void creatRenderer() {
+    private void createRenderer() {
         ArrayList<BufferedImage> images = new ArrayList<>();
         images.add(SpriteUtils.loadImage("assets/images/players/straight/0.png"));
         images.add(SpriteUtils.loadImage("assets/images/players/straight/1.png"));
@@ -28,57 +27,62 @@ public class Player extends GameObject {
         images.add(SpriteUtils.loadImage("assets/images/players/straight/4.png"));
         images.add(SpriteUtils.loadImage("assets/images/players/straight/5.png"));
         images.add(SpriteUtils.loadImage("assets/images/players/straight/6.png"));
-
-//        this.renderer = new Animation(images) ;
-        this.renderer = new PlayerRenderer("MU",images);
-
+//        this.renderer = new AnimationRenderer(images);
+        this.renderer = new PlayerRenderer("Player", images);
     }
 
-
-    int count = 0;//  TODO: se fix
     @Override
     public void run() {
+        super.run();
         this.move();
-        count++;
-        if (count>10) {
-            this.fire();
-        }
         this.limitPlayerPosition();
-    }
-    private void fire() {
-        if (GameWindow.isFirePress){
-            PlayerBullet bullet = new PlayerBullet();
-            bullet.position.set(this.position.x,this.position.y);
-            GameObject.addGameObject(bullet);
-            count =0;
+        if(this.fireCounter.run()) {
+            this.fire();
         }
     }
 
     private void move() {
+        int vx = 0;
+        int vy = 0;
+        int speed = 2;
         if(GameWindow.isUpPress) {
-            this.position.addThis(0, -3);
+            vy--;
         }
         if(GameWindow.isDownPress) {
-            this.position.addThis(0, 3);
+            vy++;
         }
         if(GameWindow.isLeftPress) {
-            this.position.addThis(-3, 0);
+            vx--;
         }
         if(GameWindow.isRightPress) {
-            this.position.addThis(3, 0);
+            vx++;
+        }
+        this.velocity.set(vx, vy);
+        this.velocity.setLength(speed);
+    }
+
+    private void fire() {
+        if(GameWindow.isFirePress) {
+            PlayerBullet bullet = new PlayerBullet();
+            bullet.position.set(this.position.x, this.position.y);
+            GameObject.addGameObject(bullet);
+            this.fireCounter.reset();
         }
     }
 
-
-
     private void limitPlayerPosition() {
-        //limit x [0, game.Background.image.width] BACKGROUND_WIDTH
-        //float x = (float)Mathx.clamp(this.position.x, 0, 384 - 32);
-        int halHeight = (int)(Setting.PLAYER_HEIGTH*this.anchor.y);
-        int halWidth = (int)(Setting.PLAYER_WIDTH*this.anchor.x);
-        float x = (float)Mathx.clamp(this.position.x,halWidth, Setting.BACKGROUND_WIDTH - halWidth);
-        //limit y [0, Screen.height]
-        float y = (float)Mathx.clamp(this.position.y, 0, Setting.SCREEN_HEIGTH - halHeight);
+        int halfWidth = (int)(Settings.PLAYER_WIDTH
+                * this.anchor.x);
+        int halfHeight = (int)(Settings.PLAYER_HEIGHT
+                * this.anchor.y);
+
+        float x = (float)Mathx.clamp(this.position.x
+                , halfWidth
+                , Settings.BACKGROUND_WIDTH - halfWidth);
+        float y = (float)Mathx.clamp(this.position.y
+                , halfHeight
+                , Settings.SCREEN_HEIGHT - halfHeight);
+
         this.position.set(x, y);
     }
 }

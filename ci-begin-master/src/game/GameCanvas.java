@@ -1,5 +1,6 @@
 package game;
 
+import game.enemy.Enemy;
 import game.player.Player;
 import game.player.PlayerBullet;
 import game.renderer.TextRenderer;
@@ -9,25 +10,20 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 public class GameCanvas extends JPanel{
-
-
-    public  GameCanvas() {
-        //this.background = new Background();
-        GameObject.addGameObject(new Background());
-        //this.player = new Player();
-        GameObject.addGameObject(new Player());
-        //this.playerBullets = new ArrayList<>();
-        GameObject.addGameObject(new Enemies());
-
-
+    public GameCanvas() {
+        GameObject.createGameObject(Background.class);
+        GameObject.createGameObject(Player.class);
+        GameObject.createGameObject(Enemy.class);
+        // arrayList.add()
+        // arrayList.get()
+        // arrayList.size()
     }
 
     @Override
     public void paint(Graphics g) {
-        g.setColor(Color.GREEN);
+        g.setColor(Color.WHITE);
         g.fillRect(0, 0, 800, 600);
-       GameObject.renderAll(g);
-
+        GameObject.renderAll(g);
     }
 
     public void runAll() {
