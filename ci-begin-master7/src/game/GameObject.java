@@ -4,6 +4,7 @@ import game.physics.BoxCollider;
 import game.physics.Physics;
 import game.renderer.Renderer;
 import game.renderer.TextRenderer;
+import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -59,6 +60,9 @@ public class GameObject {
         } catch(Exception ex) {
             return null;
         }
+    }
+    public static void clearAll(){
+        gameObjects.clear();
     }
 
     public static void runAll() {

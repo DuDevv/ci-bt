@@ -1,9 +1,12 @@
 package game;
 
 import game.enemy.Enemy;
+import game.enemy.EnemySummoner;
 import game.player.Player;
 import game.player.PlayerBullet;
 import game.renderer.TextRenderer;
+import game.scene.SceneManager;
+import game.scene.SceneWelcome;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,9 +14,10 @@ import javax.swing.*;
 
 public class GameCanvas extends JPanel{
     public GameCanvas() {
-        GameObject.recycle(Background.class);
-        GameObject.recycle(Player.class);
-        GameObject.recycle(Enemy.class);
+//        GameObject.recycle(Background.class);
+//        GameObject.recycle(Player.class);
+//        GameObject.recycle(EnemySummoner.class);
+        SceneManager.signNewScene(new SceneWelcome());
     }
 
     @Override

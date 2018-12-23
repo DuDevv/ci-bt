@@ -10,6 +10,8 @@ public class GameWindow extends JFrame {
     public static boolean isLeftPress;
     public static boolean isRightPress;
     public static boolean isFirePress;
+    public static boolean isAnyKeyPress;
+
 
     public GameWindow(){
         this.setTitle("Touhou");
@@ -19,6 +21,7 @@ public class GameWindow extends JFrame {
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                isAnyKeyPress = true;
                 if(e.getKeyCode() == KeyEvent.VK_W) {
                     isUpPress = true;
                 }
@@ -38,6 +41,7 @@ public class GameWindow extends JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
+                isAnyKeyPress = false;
                 if(e.getKeyCode() == KeyEvent.VK_W) {
                     isUpPress = false;
                 }

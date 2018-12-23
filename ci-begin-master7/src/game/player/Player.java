@@ -1,20 +1,28 @@
 package game.player;
 
 import game.*;
+import game.physics.BoxCollider;
+import game.physics.Physics;
+import game.scene.SceneGameOver;
+import game.scene.SceneManager;
 import tklibs.Mathx;
 import tklibs.SpriteUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Player extends GameObject {
+public class Player extends GameObjectPhysics{
     FrameCounter fireCounter;
+    int hp;
+    boolean immune;
+    FrameCounter immuneCounter;
 
     public Player(){
         super();
         this.position.set(200, 300);
         this.createRenderer();
         this.fireCounter = new FrameCounter(20);
+        this.boxCollider = new BoxCollider(this.position,this.anchor,6,6);
     }
 
     private void createRenderer() {
@@ -27,6 +35,9 @@ public class Player extends GameObject {
         images.add(SpriteUtils.loadImage("assets/images/players/straight/5.png"));
         images.add(SpriteUtils.loadImage("assets/images/players/straight/6.png"));
         this.renderer = new PlayerRenderer("player", images);
+        this.hp = 3;
+        this.immune = false;
+        this.immuneCounter = new FrameCounter(90);
     }
 
     @Override
@@ -37,12 +48,19 @@ public class Player extends GameObject {
         if(this.fireCounter.run()) {
             this.fire();
         }
+        this.checkImmune();
+    }
+
+    private void checkImmune() {
+        if(this.immune&&this.immuneCounter.run()){
+            this.immune = false;
+        }
     }
 
     private void move() {
         int vx = 0;
         int vy = 0;
-        int speed = 2;
+        int speed = 4;
         if(GameWindow.isUpPress) {
             vy--;
         }
@@ -82,5 +100,17 @@ public class Player extends GameObject {
                 , Settings.SCREEN_HEIGHT - halfHeight);
 
         this.position.set(x, y);
+    }
+    public void takeDamage(int damage){
+        if(this.immune)
+            return;
+        this.hp -= damage;
+        this.immune = true;
+        this.immuneCounter.reset();
+        if(this.hp <= 0) {
+            this.hp = 0;
+            this.destroy();
+            SceneManager.signNewScene(new SceneGameOver());
+        }
     }
 }
